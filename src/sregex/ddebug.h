@@ -12,12 +12,10 @@
 
 #if defined(DDEBUG) && (DDEBUG)
 
-#   include <stdio.h>
-
 #   define dd(...) \
-    fprintf(stderr, "sregex ** "); \
-    fprintf(stderr, __VA_ARGS__); \
-    fprintf(stderr, " at %s:%d\n", __FILE__, __LINE__)
+    uprintf( "sregex ** "); \
+    uprintf( __VA_ARGS__); \
+    uprintf( " at %s:%d\n", __FILE__, __LINE__)
 
 #else
 

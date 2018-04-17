@@ -9,10 +9,9 @@
 #define _SRE_CORE_H_INCLUDED_
 
 
-#include <sregex/sregex.h>
-#include <string.h>
-#include <assert.h>
+#include "sregex.h"
 
+#define SRE_USE_VALGRIND 1
 
 #ifndef SRE_USE_VALGRIND
 #define SRE_USE_VALGRIND  0

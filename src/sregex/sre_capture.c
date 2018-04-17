@@ -10,11 +10,10 @@
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
-#include <sregex/ddebug.h>
+#include "ddebug.h"
 
-
-#include <sregex/sre_capture.h>
-#include <stdio.h>
+#include "sre_capture.h"
+#include <sys/libkern.h>
 
 
 SRE_NOAPI sre_capture_t *
@@ -88,6 +87,7 @@ sre_capture_update(sre_pool_t *pool, sre_capture_t *cap, sre_uint_t group,
 SRE_NOAPI void
 sre_capture_dump(sre_capture_t *cap)
 {
+    /*
     sre_uint_t            i, n;
 
     n = cap->ovecsize / sizeof(sre_int_t);
@@ -96,4 +96,5 @@ sre_capture_dump(sre_capture_t *cap)
         fprintf(stderr, " (%lld, %lld)", (long long) cap->vector[i],
                 (long long) cap->vector[i + 1]);
     }
+    */
 }

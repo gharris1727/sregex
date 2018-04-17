@@ -11,8 +11,8 @@
 #define _SRE_REGEX_H_INCLUDED_
 
 
-#include <sregex/sre_core.h>
-#include <sregex/sre_palloc.h>
+#include "sre_core.h"
+#include "sre_palloc.h"
 
 
 typedef enum {

@@ -10,12 +10,12 @@
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
-#include <sregex/ddebug.h>
+#include "ddebug.h"
 
 
-#include <sregex/sre_vm_thompson.h>
-#include <sregex/sre_capture.h>
-#include <sregex/sre_vm_bytecode.h>
+#include "sre_vm_thompson.h"
+#include "sre_capture.h"
+#include "sre_vm_bytecode.h"
 
 
 static void sre_vm_thompson_add_thread(sre_vm_thompson_ctx_t *ctx,

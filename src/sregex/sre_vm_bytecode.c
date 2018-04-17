@@ -7,8 +7,7 @@
  */
 
 
-#include <sregex/sre_vm_bytecode.h>
-#include <stdio.h>
+#include "sre_vm_bytecode.h"
 
 
 SRE_API void
@@ -20,12 +19,15 @@ sre_program_dump(sre_program_t *prog)
     end = prog->start + prog->len;
 
     for (pc = start; pc < end; pc++) {
+        /*
         sre_dump_instruction(stdout, pc, start);
         printf("\n");
+        */
     }
 }
 
 
+/*
 void
 sre_dump_instruction(FILE *f, sre_instruction_t *pc,
     sre_instruction_t *start)
@@ -126,3 +128,4 @@ sre_dump_instruction(FILE *f, sre_instruction_t *pc,
         break;
     }
 }
+*/

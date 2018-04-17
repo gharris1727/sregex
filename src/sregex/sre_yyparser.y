@@ -12,12 +12,12 @@
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
-#include <sregex/ddebug.h>
+#include "ddebug.h"
 
 
-#include <sregex/sre_palloc.h>
-#include <sregex/sre_capture.h>
-#include <sregex/sre_regex.h>
+#include "sre_palloc.h"
+#include "sre_capture.h"
+#include "sre_regex.h"
 
 
 #define YYLTYPE YYLTYPE
@@ -39,9 +39,12 @@ typedef struct YYLTYPE {
     } while (0)
 
 
-#include <sregex/sre_yyparser.h>
-#include <ctype.h>
-
+#include "sre_yyparser.h"
+#include <sys/ctype.h>
+#include <sys/libkern.h>
+#include <sys/malloc.h>
+#include <sys/types.h>
+#include <sys/kernel.h>
 
 #define sre_read_char(sp)  *(*(sp))++
 
@@ -54,11 +57,20 @@ static void yyerror(YYLTYPE *locp, sre_pool_t *pool, sre_char **src,
 static sre_regex_t *sre_regex_desugar_counted_repetition(sre_pool_t *pool,
     sre_regex_t *subj, sre_regex_cquant_t *cquant, unsigned greedy);
 
+MALLOC_DECLARE(SRE_PARSER);
+
+#define YYMALLOC yyalloc
+#define YYFREE yyfree
+#define YYREALLOC yyrealloc
+
+void * yyalloc (size_t bytes);
+void * yyrealloc (void * ptr, size_t bytes);
+void   yyfree (void * ptr);
+
 %}
 
-
-%output  "src/sregex/sre_yyparser.c"
-%defines "src/sregex/sre_yyparser.h"
+%output  "sregex/src/sregex/sre_yyparser.c"
+%defines "sregex/src/sregex/sre_yyparser.h"
 
 
 %define api.pure
@@ -339,6 +351,17 @@ atom: '(' count alt ')'
 
 %%
 
+MALLOC_DEFINE(SRE_PARSER, "sreparser", "Bison/Yacc lexer/parser memory.");
+
+void * yyalloc (size_t bytes) {
+    return malloc(bytes, SRE_PARSER, M_WAITOK);
+}
+void * yyrealloc (void * ptr, size_t bytes) {
+    return realloc(ptr, bytes, SRE_PARSER, M_WAITOK);
+}
+void   yyfree (void * ptr) {
+    return free(ptr, SRE_PARSER);
+}
 
 static int
 yylex(YYSTYPE *lvalp, YYLTYPE *locp, sre_pool_t *pool, sre_char **src)

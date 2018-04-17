@@ -9,7 +9,7 @@
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
-#include <sregex/ddebug.h>
+#include "ddebug.h"
 
 
 #include <dynasm/dasm_proto.h>

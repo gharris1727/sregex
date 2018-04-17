@@ -6,15 +6,16 @@
  * license that can be found in the LICENSE file.
  */
 
-
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
-#include <sregex/ddebug.h>
+#include "ddebug.h"
 
 
-#include <sregex/sre_capture.h>
-#include <sregex/sre_vm_bytecode.h>
+#include "sre_capture.h"
+#include "sre_vm_bytecode.h"
+
+#include <sys/libkern.h>
 
 
 #define sre_vm_pike_free_thread(ctx, t)                                     \
@@ -243,7 +244,7 @@ sre_vm_pike_exec(sre_vm_pike_ctx_t *ctx, sre_char *input, size_t size,
             break;
         }
 
-#if (DDEBUG)
+#if 0
         fprintf(stderr, "sregex: cur list:");
         for (t = clist->head; t; t = t->next) {
             fprintf(stderr, " %d", (int) (t->pc - prog->start));
@@ -319,7 +320,7 @@ run_cur_threads:
             pc = t->pc;
             cap = t->capture;
 
-#if DDEBUG
+#if 0
             fprintf(stderr, "--- #%u", ctx->tag);
             sre_dump_instruction(stderr, pc, prog->start);
             fprintf(stderr, "\n");
@@ -1050,7 +1051,9 @@ sre_vm_pike_find_first_byte(sre_char *pos, sre_char *last,
                 break;
 
             default:
+                /*
                 sre_assert(pc->opcode);
+                */
                 break;
             }
         }
@@ -1076,5 +1079,7 @@ sre_vm_pike_clear_thread_list(sre_vm_pike_ctx_t *ctx,
         sre_vm_pike_free_thread(ctx, t);
     }
 
+    /*
     sre_assert(list->count == 0);
+    */
 }

@@ -7,8 +7,7 @@
  */
 
 
-#include <sregex/sre_regex.h>
-#include <stdio.h>
+#include "sre_regex.h"
 
 
 SRE_NOAPI sre_regex_t *
@@ -33,6 +32,7 @@ sre_regex_create(sre_pool_t *pool, sre_regex_type_t type, sre_regex_t *left,
 SRE_API void
 sre_regex_dump(sre_regex_t *r)
 {
+    /*
     sre_regex_range_t       *range;
 
     switch (r->type) {
@@ -164,6 +164,7 @@ sre_regex_dump(sre_regex_t *r)
         printf("???");
         break;
     }
+*/
 }
 
 

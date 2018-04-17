@@ -10,10 +10,11 @@
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
-#include <sregex/ddebug.h>
+#include "ddebug.h"
 
 
-#include <sregex/sre_vm_bytecode.h>
+#include "sre_vm_bytecode.h"
+#include <sys/libkern.h>
 
 
 static sre_int_t sre_program_get_leading_bytes(sre_pool_t *pool,

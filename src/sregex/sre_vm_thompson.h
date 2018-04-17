@@ -10,8 +10,8 @@
 #define _SRE_VM_THOMPSON_H_INCLUDED_
 
 
-#include <sregex/sre_core.h>
-#include <sregex/sre_vm_bytecode.h>
+#include "sre_core.h"
+#include "sre_vm_bytecode.h"
 
 
 typedef struct {

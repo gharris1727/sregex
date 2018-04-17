@@ -9,9 +9,12 @@
 #define _SRE_PALLOC_H_INCLUDED_
 
 
-#include <sregex/sregex.h>
-#include <sregex/sre_core.h>
+#include "sregex.h"
+#include "sre_core.h"
 
+#include <sys/malloc.h>
+
+MALLOC_DECLARE(SRE_POOL_MALLOC);
 
 #define sre_pagesize     4096
 

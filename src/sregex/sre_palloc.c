@@ -8,11 +8,16 @@
 #ifndef DDEBUG
 #define DDEBUG 0
 #endif
-#include <sregex/ddebug.h>
+#include "ddebug.h"
 
 
-#include <sregex/sre_palloc.h>
+#include "sre_palloc.h"
 
+#include <sys/param.h>
+#include <sys/kernel.h>
+#include <sys/libkern.h>
+
+MALLOC_DEFINE(SRE_POOL_MALLOC, "sregexpool", "Allocations for sregex pools");
 
 #if !(SRE_USE_VALGRIND)
 static void *sre_palloc_block(sre_pool_t *pool, size_t size);
@@ -22,7 +27,6 @@ static void *sre_palloc_large(sre_pool_t *pool, size_t size);
 static void * sre_memalign(size_t alignment, size_t size);
 #endif
 
-
 SRE_API sre_pool_t *
 sre_create_pool(size_t size)
 {
@@ -30,7 +34,7 @@ sre_create_pool(size_t size)
 
 #if (SRE_USE_VALGRIND)
     size = sizeof(sre_pool_t);
-    p = malloc(size);
+    p = malloc(size, SRE_POOL_MALLOC, M_WAITOK);
 #else
     p = sre_memalign(SRE_POOL_ALIGNMENT, size);
 #endif
@@ -76,7 +80,7 @@ sre_destroy_pool(sre_pool_t *pool)
 
 #if (SRE_USE_VALGRIND)
     if (pool->large == NULL) {
-        free(pool);
+        free(pool, SRE_POOL_MALLOC);
         return;
     }
 #endif
@@ -84,9 +88,9 @@ sre_destroy_pool(sre_pool_t *pool)
 #if (SRE_USE_VALGRIND)
     for (l = pool->large; l; l = n) {
         if (l->alloc) {
-            free(l->alloc);
+            free(l->alloc, SRE_POOL_MALLOC);
             n = l->next;
-            free(l);
+            free(l, SRE_POOL_MALLOC);
 
         } else {
             n = l->next;
@@ -95,14 +99,14 @@ sre_destroy_pool(sre_pool_t *pool)
 #else
     for (l = pool->large; l; l = l->next) {
         if (l->alloc) {
-            free(l->alloc);
+            free(l->alloc, SRE_POOL_MALLOC);
         }
     }
 #endif
 
 #if !(SRE_USE_VALGRIND)
     for (p = pool, n = pool->d.next; /* void */; p = n, n = n->d.next) {
-        free(p);
+        free(p, SRE_POOL_MALLOC);
 
         if (n == NULL) {
             break;
@@ -110,7 +114,7 @@ sre_destroy_pool(sre_pool_t *pool)
     }
 #else
     pool->large = NULL;
-    free(pool);
+    free(pool, SRE_POOL_MALLOC);
 #endif
 }
 
@@ -127,14 +131,14 @@ sre_reset_pool(sre_pool_t *pool)
 
     for (l = pool->large; l; l = l->next) {
         if (l->alloc) {
-            free(l->alloc);
+            free(l->alloc, SRE_POOL_MALLOC);
         }
     }
 
 #if (SRE_USE_VALGRIND)
     for (l = pool->large; l; l = next) {
         next = l->next;
-        free(l);
+        free(l, SRE_POOL_MALLOC);
     }
 #endif
 
@@ -261,7 +265,7 @@ sre_palloc_large(sre_pool_t *pool, size_t size)
     sre_uint_t         n;
     sre_pool_large_t  *large;
 
-    p = malloc(size);
+    p = malloc(size, SRE_POOL_MALLOC, M_WAITOK);
     if (p == NULL) {
         return NULL;
     }
@@ -280,12 +284,12 @@ sre_palloc_large(sre_pool_t *pool, size_t size)
     }
 
 #if (SRE_USE_VALGRIND)
-    large = malloc(sizeof(sre_pool_large_t));
+    large = malloc(sizeof(sre_pool_large_t), SRE_POOL_MALLOC, M_WAITOK);
 #else
     large = sre_palloc(pool, sizeof(sre_pool_large_t));
 #endif
     if (large == NULL) {
-        free(p);
+        free(p, SRE_POOL_MALLOC);
         return NULL;
     }
 
@@ -309,12 +313,12 @@ sre_pfree(sre_pool_t *pool, void *p)
 
     for (l = pool->large; l; l = l->next) {
         if (p == l->alloc) {
-            free(l->alloc);
+            free(l->alloc, SRE_POOL_MALLOC);
             l->alloc = NULL;
 
 #if (SRE_USE_VALGRIND)
             *next = l->next;
-            free(l);
+            free(l, SRE_POOL_MALLOC);
 #endif
             return SRE_OK;
         }

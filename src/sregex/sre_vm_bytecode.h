@@ -11,8 +11,7 @@
 #define _SRE_BYTECODE_H_INCLUDED_
 
 
-#include <sregex/sre_regex.h>
-#include <stdio.h>
+#include "sre_regex.h"
 
 
 typedef enum {
@@ -87,8 +86,10 @@ struct sre_program_s {
 };
 
 
+/*
 void sre_dump_instruction(FILE *f, sre_instruction_t *pc,
     sre_instruction_t *start);
+    */
 
 
 #endif /* _SRE_BYTECODE_H_INCLUDED_ */

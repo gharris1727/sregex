@@ -10,9 +10,8 @@
 #define _SREGEX_H_INCLUDED_
 
 
-#include <stdint.h>
-#include <stdlib.h>
-
+#include <sys/stdint.h>
+#include <sys/malloc.h>
 
 /* core constants and types */
 
