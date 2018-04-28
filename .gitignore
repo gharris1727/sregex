@@ -63,3 +63,4 @@ bench/sregex
 bench/pcre
 bench/re2
 bench/*.txt
+obj
