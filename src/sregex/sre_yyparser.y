@@ -69,8 +69,6 @@ void   yyfree (void * ptr);
 
 %}
 
-%output  "sregex/src/sregex/sre_yyparser.c"
-%defines "sregex/src/sregex/sre_yyparser.h"
 
 
 %define api.pure
