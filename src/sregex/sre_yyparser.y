@@ -57,8 +57,6 @@ static sre_regex_t *sre_regex_desugar_counted_repetition(sre_pool_t *pool,
 %}
 
 
-%output  "src/sregex/sre_yyparser.c"
-%defines "src/sregex/sre_yyparser.h"
 
 
 %define api.pure
