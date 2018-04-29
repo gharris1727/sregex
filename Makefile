@@ -13,5 +13,11 @@ YACC=bison -d
 .o.dasc:
 	luajit dynasm/dynasm.lua -o ${.TARGET} ${.ALLSRC}
 
+load:
+
+unload:
+
+.PHONY: load unload
+
 .include <bsd.lib.mk>
 .include <bsd.obj.mk>
